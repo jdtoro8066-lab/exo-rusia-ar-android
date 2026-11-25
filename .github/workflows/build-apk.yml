@@ -1,0 +1,32 @@
+name: Crear APK EXO Rusia AR
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: EXO_RusiaAR_GitHub_Automatico
+    steps:
+      - name: Obtener codigo
+        uses: actions/checkout@v4
+      - name: Instalar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Preparar Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Compilar APK
+        run: gradle --no-daemon :app:assembleDebug
+      - name: Guardar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: EXO-Rusia-AR-APK
+          path: EXO_RusiaAR_GitHub_Automatico/app/build/outputs/apk/debug/app-debug.apk
